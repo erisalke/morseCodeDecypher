@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace morseCodeDecypher
 {
@@ -14,38 +15,41 @@ namespace morseCodeDecypher
                       { ".-", "a" },
                       { "-...", "b" },
                       { "-.-.", "c" },
-                      // "-.."  : "d",
-                      // "."    : "e",
-                      // "..-." : "f",
-                      // "--."  : "g",
-                      // "...." : "h",
-                      // ".."   : "i",
-                      // ".---" : "j",
-                      // "-.-"  : "k",
-                      // ".-.." : "l",
-                      // "--"   : "m",
-                      // "-."   : "n",
-                      // "---"  : "o",
-                      // ".--." : "p",
-                      // "--.-" : "q",
-                      // ".-."  : "r",
-                      // "..."  : "s",
-                      // "-"    : "t",
-                      // "..-"  : "u",
-                      // "...-" : "v",
-                      // ".--"  : "w",
-                      // "-..-" : "x",
-                      // "-.--" : "y",
-                      // "--.." : "z"
+                      { "-..", "d" },
+                      { ".", "e" },
+                      { "..-.", "f" },
+                      { "--.", "g" },
+                      { "....", "h" },
+                      { "..", "i" },
+                      { ".---", "j" },
+                      { "-.-", "k" },
+                      { ".-..", "l" },
+                      { "--", "m" },
+                      { "-.", "n" },
+                      { "---", "o" },
+                      { ".--.", "p" },
+                      { "--.-", "q" },
+                      { ".-.", "r" },
+                      { "...", "s" },
+                      { "-", "t" },
+                      { "..-", "u" },
+                      { "...-", "v" },
+                      { ".--", "w" },
+                      { "-..-", "x" },
+                      { "-.--", "y" },
+                      { "--..", "z" }
                     };
         }
 
         private static IEnumerable ReadDictionaryFromFile(){
-          return new List<string>() { "word1", "word2" };
+          string[] lines = System.IO.File.ReadAllLines(@"./google1000.txt");
+          return new List<string>(lines);
         }
 
         private static string GetEncryptedMessage(){
-            return "-.-";
+            //var str = ".--..-..-.-.-----.-----....--...-.-.-..-....--.-......----."; // orgiginal?
+            var str = ".--..-..-.-.-----.-----....--...-.-.-..-....--.-......----."; // "SOS HELP" & ?
+            return str;
         }
 
         private static void JustWriteToConsole(IEnumerable sentences){
@@ -60,7 +64,7 @@ namespace morseCodeDecypher
             Console.WriteLine("--------- Morse Code Decypher v.1.0 ---------");
 
             var message = GetEncryptedMessage();
-            var letterCodesHash = GetLetterCodes();
+            var letterCodesHash = GetLetterCodes() as Dictionary<string,string>;
             var dictionary = ReadDictionaryFromFile();
 
             var decoder = new Decoder( message,
@@ -68,7 +72,6 @@ namespace morseCodeDecypher
                                        dictionary);
 
             decoder.Calculate();
-
             JustWriteToConsole(decoder.ReturnResults());
             //Console.Read();
         }
@@ -79,7 +82,7 @@ namespace morseCodeDecypher
         private string factoryValue;
         private IDictionary letterCodesHash;
         private IEnumerable dictionary;
-        private IEnumerable results;
+        private List<string> results;
 
         public Decoder(string encodedMsg,
                        IDictionary letterCodesHash,
@@ -95,10 +98,33 @@ namespace morseCodeDecypher
                             };
         }
 
-        public void Calculate()
+        // private IEnumerable GetPossibilities(string word, ){
+        //   var newChar =
+        //   return this.dictionary.Where(x => x.containsOrStartsWith(word+newChar));
+        // }
+
+        public void Calculate(int head=0, string word="", string sentence="")
         {
-// damnstillempty... :)
-        }
+          if (head == this.factoryValue.Length -1){
+            //all makes sense check?
+              // Add solution to List of solutions
+              this.results.Add(sentence);
+          }
+          else{
+            // string value = "";
+            // for (var offset = 1; offset<Math.Min(5, this.factoryValue.Length-head); offset++){
+            //   var ch = this.factoryValue.Substring(head, offset);
+            //   if (this.letterCodesHash.TryGetValue(ch, out value))
+            //   {
+            //     this.dictionary.Where(x=>x.StartsWith(word+value))
+            //   }
+            //   var letter = this.letterCodesHash[ch];
+
+              // Calculate(head+offset, word+"a", sentence+word);
+            }
+          }
+
+
 
         // public IList ReturnResults()
         public IEnumerable<string> ReturnResults()
