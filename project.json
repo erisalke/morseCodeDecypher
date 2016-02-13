@@ -1,26 +1,26 @@
 {
   "version": "1.0.0-*",
   "description": "morseCodeDecypher Console Application",
-  "authors": [ "" ],
-  "tags": [ "" ],
+  "authors": [
+    ""
+  ],
+  "tags": [
+    ""
+  ],
   "projectUrl": "",
   "licenseUrl": "",
-
   "compilationOptions": {
     "emitEntryPoint": true
   },
-
   "tooling": {
     "defaultNamespace": "morseCodeDecypher"
   },
-
   "dependencies": {
+    "System.IO.FileSystem": "4.0.1-beta-23516"
   },
-
   "commands": {
     "run": "morseCodeDecypher"
   },
-
   "frameworks": {
     "dnxcore50": {
       "dependencies": {
@@ -28,7 +28,8 @@
         "System.Collections": "4.0.11-beta-23516",
         "System.Console": "4.0.0-beta-23516",
         "System.Linq": "4.0.1-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
+        "System.Threading": "4.0.11-beta-23516",
+        "System.IO": "4.0.11-beta-23516"
       }
     }
   }

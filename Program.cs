@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace morseCodeDecypher
 {
@@ -41,7 +42,7 @@ namespace morseCodeDecypher
                     };
         }
 
-        private static IEnumerable ReadDictionaryFromFile(){
+        private static List<string> ReadDictionaryFromFile(){
           string[] lines = System.IO.File.ReadAllLines(@"./google1000.txt");
           return new List<string>(lines);
         }
@@ -80,16 +81,16 @@ namespace morseCodeDecypher
     public class Decoder
     {
         private string factoryValue;
-        private IDictionary letterCodesHash;
-        private IEnumerable dictionary;
+        private Dictionary<string,string> letterCodesHash;
+        private List<string> dictionary;
         private List<string> results;
 
         public Decoder(string encodedMsg,
                        IDictionary letterCodesHash,
-                       IEnumerable dictionary)
+                       List<string> dictionary)
         {
             this.factoryValue = encodedMsg;
-            this.letterCodesHash = letterCodesHash;
+            this.letterCodesHash = (letterCodesHash as Dictionary<string,string>);
             this.dictionary = dictionary;
 
             this.results = new List<string>(){
@@ -111,18 +112,27 @@ namespace morseCodeDecypher
               this.results.Add(sentence);
           }
           else{
-            // string value = "";
-            // for (var offset = 1; offset<Math.Min(5, this.factoryValue.Length-head); offset++){
-            //   var ch = this.factoryValue.Substring(head, offset);
-            //   if (this.letterCodesHash.TryGetValue(ch, out value))
-            //   {
-            //     this.dictionary.Where(x=>x.StartsWith(word+value))
-            //   }
-            //   var letter = this.letterCodesHash[ch];
+            string value = "";
+            for (var offset = 1; offset<Math.Min(5, this.factoryValue.Length-head); offset++){
+              string ch = this.factoryValue.Substring(head, offset);
+              if (this.letterCodesHash.TryGetValue(ch, out value))
+              {
+                var possibleWords = this.dictionary.Where(x=>x.StartsWith(word+value));
+                if (possibleWords.Count() > 0){
+                  var dup = possibleWords.FirstOrDefault(x=>x == word+value);
+                  if(dup != null){
+                    Console.WriteLine("Head {0}, word: {1}", head, word+value);
+                    Calculate(head+offset, "", sentence+word+value+" ");
+                  }
+
+                  Calculate(head+offset, word+value, sentence);
+                }
+              }
 
               // Calculate(head+offset, word+"a", sentence+word);
             }
           }
+        }
 
 
 
